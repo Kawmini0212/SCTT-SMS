@@ -1,0 +1,17 @@
+{
+    "name": "sms-backend-setup",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "init-db": "node scripts/initDatabase.js",
+        "start:auth": "cd services/auth-service && npm start",
+        "start:student": "cd services/student-service && npm start",
+        "dev:auth": "cd services/auth-service && npm run dev",
+        "dev:student": "cd services/student-service && npm run dev"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "dotenv": "^16.3.1",
+        "mysql2": "^3.6.5"
+    }
+}
