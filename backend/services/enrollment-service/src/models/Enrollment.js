@@ -7,8 +7,8 @@ class Enrollment {
         for (const courseId of courseIds) {
             const [result] = await db.execute(
                 `INSERT IGNORE INTO enrollments
-           (student_id, course_id, semester, academic_year, status)
-         VALUES (?, ?, ?, ?, 'enrolled')`,
+           (student_id, course_id, semester, academic_year, status, updated_at)
+         VALUES (?, ?, ?, ?, 'enrolled', NOW())`,
                 [studentId, courseId, semester, academicYear]
             );
             results.push({ courseId, enrollmentId: result.insertId, inserted: result.affectedRows > 0 });
@@ -63,7 +63,7 @@ class Enrollment {
         const completedAt = status === 'completed' ? new Date() : null;
         const [result] = await db.execute(
             `UPDATE enrollments
-       SET status = ?, completed_at = ?
+       SET status = ?, completed_at = ?, updated_at = NOW()
        WHERE enrollment_id = ?`,
             [status, completedAt, enrollmentId]
         );
@@ -86,7 +86,7 @@ class Enrollment {
         // Drop removed
         for (const courseId of toRemove) {
             await db.execute(
-                `UPDATE enrollments SET status = 'dropped'
+                `UPDATE enrollments SET status = 'dropped', updated_at = NOW()
          WHERE student_id = ? AND course_id = ? AND semester = ? AND academic_year = ?`,
                 [studentId, courseId, semester, academicYear]
             );
@@ -95,8 +95,8 @@ class Enrollment {
         for (const courseId of toAdd) {
             await db.execute(
                 `INSERT IGNORE INTO enrollments
-           (student_id, course_id, semester, academic_year, status)
-         VALUES (?, ?, ?, ?, 'enrolled')`,
+           (student_id, course_id, semester, academic_year, status, updated_at)
+         VALUES (?, ?, ?, ?, 'enrolled', NOW())`,
                 [studentId, courseId, semester, academicYear]
             );
         }

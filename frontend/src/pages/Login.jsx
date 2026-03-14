@@ -10,6 +10,7 @@ export default function Login() {
     const { login } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [logoError, setLogoError] = useState(false);
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -34,8 +35,17 @@ export default function Login() {
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <div className="inline-flex w-16 h-16 bg-brand-red rounded-xl
-                          items-center justify-center mb-4">
-                        <span className="text-brand-white font-bold text-3xl">S</span>
+                          items-center justify-center mb-4 p-1">
+                        {!logoError ? (
+                            <img
+                                src="/sms-logo.png"
+                                alt="Student Management Logo"
+                                className="w-[90%] h-[90%] object-contain"
+                                onError={() => setLogoError(true)}
+                            />
+                        ) : (
+                            <span className="text-brand-white font-bold text-3xl">S</span>
+                        )}
                     </div>
                     <h1 className="text-3xl font-bold text-brand-white">Student Management</h1>
                     <p className="text-brand-gray3 mt-1">Sign in to your account</p>

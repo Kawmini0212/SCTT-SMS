@@ -7,6 +7,7 @@ export default function Navbar({ onMenuClick }) {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [showDropdown, setShowDropdown] = useState(false);
+    const [logoError, setLogoError] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -27,8 +28,17 @@ export default function Navbar({ onMenuClick }) {
                         </button>
 
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-brand-red rounded-lg flex items-center justify-center">
-                                <span className="text-brand-white font-bold text-xl">S</span>
+                            <div className="w-10 h-10 bg-brand-red rounded-lg flex items-center justify-center p-0.5">
+                                {!logoError ? (
+                                    <img
+                                        src="/sms-logo.png"
+                                        alt="Student Management Logo"
+                                        className="w-[88%] h-[88%] object-contain"
+                                        onError={() => setLogoError(true)}
+                                    />
+                                ) : (
+                                    <span className="text-brand-white font-bold text-xl">S</span>
+                                )}
                             </div>
                             <h1 className="text-xl font-bold text-brand-white hidden sm:block tracking-wide">
                                 Student Management

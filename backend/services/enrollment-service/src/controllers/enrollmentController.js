@@ -148,7 +148,8 @@ class EnrollmentController {
                     credits: courseMap[e.course_id]?.credits || 0,
                     status: e.status,
                     enrolledAt: e.enrolled_at,
-                    completedAt: e.completed_at
+                    completedAt: e.completed_at,
+                    updatedAt: e.updated_at
                 });
             }
 
@@ -203,7 +204,8 @@ class EnrollmentController {
                 credits: courseMap[e.course_id]?.credits || 0,
                 status: e.status,
                 enrolledAt: e.enrolled_at,
-                completedAt: e.completed_at
+                completedAt: e.completed_at,
+                updatedAt: e.updated_at
             }));
 
             res.json({ success: true, data: enriched });
