@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-brand-gray min-h-screen font-sans antialiased text-brand-black;
+  }
+}
+
+@layer components {
+
+  /* ── Buttons ── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-red text-brand-white hover:bg-brand-red-hover focus:ring-brand-red active:scale-95;
+  }
+
+  .btn-yellow {
+    @apply btn bg-brand-yellow text-brand-black hover:bg-brand-yellow-hover focus:ring-brand-yellow active:scale-95;
+  }
+
+  .btn-outline {
+    @apply btn bg-transparent border-2 border-brand-gray2 text-brand-black hover:border-brand-black focus:ring-brand-black;
+  }
+
+  .btn-danger {
+    @apply btn bg-brand-red text-brand-white hover:bg-brand-red-hover focus:ring-brand-red;
+  }
+
+  .btn-sm {
+    @apply text-xs px-3 py-1.5;
+  }
+
+  .btn-lg {
+    @apply text-base px-7 py-3;
+  }
+
+  /* ── Form inputs ── */
+  .input {
+    @apply w-full px-4 py-3 border-2 border-brand-gray2 rounded-lg bg-brand-white text-brand-black placeholder-brand-gray3 focus:outline-none focus:border-brand-red focus:ring-2 focus:ring-brand-red/20 transition-colors duration-200;
+  }
+
+  .input-error {
+    @apply border-brand-red focus:border-brand-red focus:ring-brand-red/20;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-brand-white rounded-xl border border-brand-gray2 shadow-sm;
+  }
+}
