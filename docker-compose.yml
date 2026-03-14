@@ -1,0 +1,188 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: sms-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: Kawmini
+      MYSQL_DATABASE: auth_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
+    networks:
+      - sms-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pKawmini"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./backend/services/auth-service
+      dockerfile: Dockerfile
+    container_name: sms-auth-service
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      NODE_ENV: production
+      PORT: 5001
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: Kawmini
+      DB_NAME: auth_db
+      JWT_SECRET: your_super_secret_jwt_key_change_this_in_production
+      JWT_EXPIRES_IN: 24h
+      AUDIT_SERVICE_URL: http://audit-service:5005
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - sms-network
+
+  # Student Service
+  student-service:
+    build:
+      context: ./backend/services/student-service
+      dockerfile: Dockerfile
+    container_name: sms-student-service
+    restart: unless-stopped
+    ports:
+      - "5002:5002"
+    environment:
+      NODE_ENV: production
+      PORT: 5002
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: Kawmini
+      DB_NAME: student_db
+      AUTH_SERVICE_URL: http://auth-service:5001
+      AUDIT_SERVICE_URL: http://audit-service:5005
+    depends_on:
+      mysql:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    networks:
+      - sms-network
+
+  # Course Service
+  course-service:
+    build:
+      context: ./backend/services/course-service
+      dockerfile: Dockerfile
+    container_name: sms-course-service
+    restart: unless-stopped
+    ports:
+      - "5003:5003"
+    environment:
+      NODE_ENV: production
+      PORT: 5003
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: Kawmini
+      DB_NAME: course_db
+      AUTH_SERVICE_URL: http://auth-service:5001
+      AUDIT_SERVICE_URL: http://audit-service:5005
+    depends_on:
+      mysql:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    networks:
+      - sms-network
+
+  # Enrollment Service
+  enrollment-service:
+    build:
+      context: ./backend/services/enrollment-service
+      dockerfile: Dockerfile
+    container_name: sms-enrollment-service
+    restart: unless-stopped
+    ports:
+      - "5004:5004"
+    environment:
+      NODE_ENV: production
+      PORT: 5004
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: Kawmini
+      DB_NAME: enrollment_db
+      AUTH_SERVICE_URL: http://auth-service:5001
+      STUDENT_SERVICE_URL: http://student-service:5002
+      COURSE_SERVICE_URL: http://course-service:5003
+      AUDIT_SERVICE_URL: http://audit-service:5005
+    depends_on:
+      mysql:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+      student-service:
+        condition: service_started
+      course-service:
+        condition: service_started
+    networks:
+      - sms-network
+
+  # Audit Service
+  audit-service:
+    build:
+      context: ./backend/services/audit-service
+      dockerfile: Dockerfile
+    container_name: sms-audit-service
+    restart: unless-stopped
+    ports:
+      - "5005:5005"
+    environment:
+      NODE_ENV: production
+      PORT: 5005
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: Kawmini
+      DB_NAME: audit_db
+      AUTH_SERVICE_URL: http://auth-service:5001
+    depends_on:
+      mysql:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    networks:
+      - sms-network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sms-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - auth-service
+      - student-service
+      - course-service
+      - enrollment-service
+      - audit-service
+    networks:
+      - sms-network
+
+networks:
+  sms-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
