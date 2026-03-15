@@ -94,7 +94,7 @@ export default function EnrollmentList() {
     const spinner = <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />;
 
     const SEMESTERS = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5', 'Semester 6', 'Semester 7', 'Semester 8'];
-    const YEARS = [1, 2, 3, 4];
+    const YEARS = [2024, 2025, 2026, 2027, 2028];
 
     const openStatusEdit = (e) => { setStatusEditEnrollment(e); setNewStatus(e.status); };
 
@@ -190,7 +190,7 @@ export default function EnrollmentList() {
                         <select value={yearFilter} onChange={(e) => { setYearFilter(e.target.value); setPage(1); }}
                             className="input pr-10 appearance-none min-w-[140px]">
                             <option value="">All Years</option>
-                            {YEARS.map((y) => <option key={y} value={y}>Year {y}</option>)}
+                            {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
                         </select>
                         {yearFilter && (
                             <button onClick={() => { setYearFilter(''); setPage(1); }}
@@ -225,7 +225,7 @@ export default function EnrollmentList() {
                         {yearFilter && (
                             <span className="flex items-center gap-1.5 px-3 py-1 bg-brand-yellow/20 text-brand-black
                                 text-sm font-medium rounded-full border border-brand-yellow">
-                                Year {yearFilter}
+                                {yearFilter}
                                 <button onClick={() => { setYearFilter(''); setPage(1); }} className="ml-1 hover:text-brand-red">
                                     <FiX className="w-3.5 h-3.5" />
                                 </button>
