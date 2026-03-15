@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1773542280490" clover="3.2.0">
+  <project timestamp="1773542280490" name="All files">
+    <metrics statements="22" coveredstatements="21" conditionals="18" coveredconditionals="18" methods="4" coveredmethods="4" elements="44" coveredelements="43" complexity="0" loc="22" ncloc="22" packages="1" files="1" classes="1"/>
+    <file name="auditController.js" path="C:\Users\Kawmi\Desktop\sms\TestApp\backend\services\audit-service\src\controllers\auditController.js">
+      <metrics statements="22" coveredstatements="21" conditionals="18" coveredconditionals="18" methods="4" coveredmethods="4"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="8" count="4" type="stmt"/>
+      <line num="18" count="4" type="stmt"/>
+      <line num="20" count="4" type="stmt"/>
+      <line num="31" count="3" type="stmt"/>
+      <line num="37" count="1" type="stmt"/>
+      <line num="44" count="7" type="stmt"/>
+      <line num="54" count="7" type="stmt"/>
+      <line num="56" count="7" type="stmt"/>
+      <line num="69" count="7" type="stmt"/>
+      <line num="71" count="0" type="stmt"/>
+      <line num="78" count="3" type="stmt"/>
+      <line num="79" count="3" type="stmt"/>
+      <line num="80" count="2" type="stmt"/>
+      <line num="82" count="1" type="stmt"/>
+      <line num="89" count="3" type="stmt"/>
+      <line num="90" count="3" type="stmt"/>
+      <line num="91" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="92" count="1" type="stmt"/>
+      <line num="94" count="1" type="stmt"/>
+      <line num="96" count="1" type="stmt"/>
+      <line num="101" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

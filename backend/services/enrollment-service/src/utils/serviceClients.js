@@ -4,12 +4,12 @@ const STUDENT_SERVICE_URL = process.env.STUDENT_SERVICE_URL || 'http://localhost
 const COURSE_SERVICE_URL = process.env.COURSE_SERVICE_URL || 'http://localhost:5003';
 const AUDIT_SERVICE_URL = process.env.AUDIT_SERVICE_URL || 'http://localhost:5005';
 
-// ── Helper: forward the calling admin's token ─────────────────────────────
+// Helper: forward the calling admin's token 
 function authHeader(token) {
     return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-// ── Student Service client ─────────────────────────────────────────────────
+// Student Service client 
 const studentClient = {
     async getById(studentId, token) {
         try {
@@ -41,7 +41,7 @@ const studentClient = {
     }
 };
 
-// ── Course Service client ──────────────────────────────────────────────────
+// Course Service client 
 const courseClient = {
     async getByIds(courseIds, token) {
         try {
@@ -60,7 +60,7 @@ const courseClient = {
     }
 };
 
-// ── Audit Service client ───────────────────────────────────────────────────
+// Audit Service client 
 const auditClient = {
     async log(logData) {
         try {

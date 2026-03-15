@@ -7,7 +7,7 @@ services:
     container_name: sms-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: Kawmini
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: auth_db
     ports:
       - "3306:3306"
@@ -17,7 +17,7 @@ services:
     networks:
       - sms-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pKawmini"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -37,7 +37,7 @@ services:
       DB_HOST: mysql
       DB_PORT: 3306
       DB_USER: root
-      DB_PASSWORD: Kawmini
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: auth_db
       JWT_SECRET: your_super_secret_jwt_key_change_this_in_production
       JWT_EXPIRES_IN: 24h
@@ -63,7 +63,7 @@ services:
       DB_HOST: mysql
       DB_PORT: 3306
       DB_USER: root
-      DB_PASSWORD: Kawmini
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: student_db
       AUTH_SERVICE_URL: http://auth-service:5001
       AUDIT_SERVICE_URL: http://audit-service:5005
@@ -90,7 +90,7 @@ services:
       DB_HOST: mysql
       DB_PORT: 3306
       DB_USER: root
-      DB_PASSWORD: Kawmini
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: course_db
       AUTH_SERVICE_URL: http://auth-service:5001
       AUDIT_SERVICE_URL: http://audit-service:5005
@@ -117,7 +117,7 @@ services:
       DB_HOST: mysql
       DB_PORT: 3306
       DB_USER: root
-      DB_PASSWORD: Kawmini
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: enrollment_db
       AUTH_SERVICE_URL: http://auth-service:5001
       STUDENT_SERVICE_URL: http://student-service:5002
@@ -150,7 +150,7 @@ services:
       DB_HOST: mysql
       DB_PORT: 3306
       DB_USER: root
-      DB_PASSWORD: Kawmini
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: audit_db
       AUTH_SERVICE_URL: http://auth-service:5001
     depends_on:
