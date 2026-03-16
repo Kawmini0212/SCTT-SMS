@@ -38,6 +38,20 @@ const studentClient = {
             console.error('Failed to fetch student details:', err.message);
             return []; // Return empty array instead of throwing
         }
+    },
+
+    async updateAcademicInfo(studentId, currentYear, currentSemester, token) {
+        try {
+            const res = await axios.put(
+                `${STUDENT_SERVICE_URL}/api/students/${studentId}`,
+                { currentYear, currentSemester },
+                { headers: authHeader(token), timeout: 5000 }
+            );
+            return res.data.data;
+        } catch (err) {
+            console.error('Failed to update student academic info:', err.message);
+            // Don't throw - enrollment should still succeed even if this fails
+        }
     }
 };
 

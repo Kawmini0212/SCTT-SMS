@@ -26,6 +26,15 @@ class EnrollmentController {
             const results = await Enrollment.enrollMany(studentId, courseIds, semester, academicYear);
             const newlyEnrolled = results.filter(r => r.inserted);
 
+            // 4. Update student's current academic year and semester
+            try {
+                const yearFromSemester = parseInt(academicYear);
+                await studentClient.updateAcademicInfo(studentId, yearFromSemester, semester, token);
+            } catch (err) {
+                console.error('Warning: Could not update student academic info:', err.message);
+                // Continue - don't fail the enrollment if student update fails
+            }
+
             await auditClient.log({
                 adminId: req.user.adminId,
                 studentId,
@@ -237,6 +246,15 @@ class EnrollmentController {
                 studentId, semester, academicYear, courseIds
             );
 
+            // Update student's academic year and semester
+            try {
+                const yearFromSemester = parseInt(academicYear);
+                await studentClient.updateAcademicInfo(studentId, yearFromSemester, semester, token);
+            } catch (err) {
+                console.error('Warning: Could not update student academic info:', err.message);
+                // Continue - don't fail the update if student update fails
+            }
+
             await auditClient.log({
                 adminId: req.user.adminId,
                 studentId: parseInt(studentId),
@@ -270,6 +288,23 @@ class EnrollmentController {
             }
 
             await Enrollment.updateStatus(id, status);
+
+            // Update student's academic info based on latest enrollment
+            try {
+                const token = req.headers.authorization?.split(' ')[1];
+                const allEnrollments = await Enrollment.findByStudent(enrollment.student_id);
+                if (allEnrollments.length > 0) {
+                    // Get most recent enrollment
+                    const latest = allEnrollments.sort((a, b) => 
+                        new Date(b.enrolled_at) - new Date(a.enrolled_at)
+                    )[0];
+                    const yearFromSemester = parseInt(latest.academic_year);
+                    await studentClient.updateAcademicInfo(enrollment.student_id, yearFromSemester, latest.semester, token);
+                }
+            } catch (err) {
+                console.error('Warning: Could not update student academic info:', err.message);
+                // Continue - don't fail the update if student update fails
+            }
 
             await auditClient.log({
                 adminId: req.user.adminId,
