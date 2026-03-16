@@ -128,6 +128,7 @@ CREATE TABLE enrollments (
     status ENUM('enrolled', 'completed', 'dropped', 'failed') DEFAULT 'enrolled',
     enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     completed_at TIMESTAMP NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_student_enrollment (student_id),
     INDEX idx_course_enrollment (course_id),
     INDEX idx_semester (semester, academic_year),
